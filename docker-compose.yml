@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  postgresdb:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  onlinetestbackend:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    command: >
+      sh -c "python manage.py migrate && ./manage.py runserver 0:8000"
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgresdb
+    env_file: .env
+    
+volumes:
+  postgres_data:

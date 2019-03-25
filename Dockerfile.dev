@@ -1,0 +1,36 @@
+# Pull base image
+FROM python:3.6
+
+# Set Environment Variables
+# PYTHONUNBUFFERED ensures our console output looks familiar 
+# and is not buffered by Docker, which we don’t want. 
+ENV PYTHONUNBUFFERED 1
+
+# If you prefer miniconda:
+#FROM continuumio/miniconda3
+
+# Set working directory
+WORKDIR /code
+
+# Copy only the requirements.txt
+ADD ./requirements.txt ./
+
+# Install dependencies
+RUN pip install -r requirements.txt
+
+# Copy whole project
+ADD . /code
+
+# Keep the port open
+EXPOSE 8000
+
+# LABEL Name=onlinetestbackend Version=0.0.1
+
+# Using pipenv:
+#RUN python3 -m pip install pipenv
+#RUN pipenv install --ignore-pipfile
+#CMD ["pipenv", "run", "python3", "-m", "onlinetestbackend"]
+
+# Using miniconda (make sure to replace 'myenv' w/ your environment name):
+#RUN conda env create -f environment.yml
+#CMD /bin/bash -c "source activate myenv && python3 -m onlinetestbackend"
